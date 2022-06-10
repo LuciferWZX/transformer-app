@@ -5,12 +5,12 @@ import {userModel} from "@/models/userModel";
 interface IProps{
     children?:React.ReactNode
 }
-const Auth:FC<IProps> = ({children}) => {
+const LoginAuth:FC<IProps> = ({children}) => {
     const {user} = useModel(userModel);
-    console.log("auth",user)
-    if (!user){
-        return <Navigate to="/login"/>
+    console.log("login_auth",user)
+    if (user){
+        return <Navigate to="/"/>
     }
     return <Fragment>{children}</Fragment>
 }
-export default Auth
+export default LoginAuth

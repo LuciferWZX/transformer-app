@@ -1,6 +1,7 @@
 import { ErrorType } from '@/types/request';
 import {extend, ResponseError} from 'umi-request';
 import {message} from "antd";
+import {userModel} from "@/models/userModel";
 const errorHandler=(error:ResponseError<any>)=>{
     const ERROR_KEY = "error_key"
     if(error.response){
@@ -26,5 +27,23 @@ const request = extend({
         'Content-Type': 'application/json; charset=utf-8',
     },
     errorHandler:errorHandler
+});
+// request拦截器
+request.interceptors.request.use((url, options) => {
+    const optionObj:any = {}
+    //用户有token就存入token
+    if(userModel.state.loginInfo){
+        optionObj.Authorization = `Bearer ${userModel.state.loginInfo.token}`
+    }
+    return {
+        url: url,
+        options: {
+            ...options,
+            headers:{
+                ...options.headers,
+                ...optionObj
+            }
+        },
+    };
 });
 export default request

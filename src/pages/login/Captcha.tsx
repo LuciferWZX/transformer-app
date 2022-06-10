@@ -2,7 +2,7 @@ import {FC, useEffect, useRef} from "react";
 import {CaptchaBox, HoverCaptchaBox} from "@/pages/login/style";
 import {useDebounceFn, useHover, useInterval, useSize} from "ahooks";
 import {userModel} from "@/models/userModel";
-import {useLoading, useModel} from "foca";
+import {useComputed, useLoading, useModel} from "foca";
 import { SyncOutlined } from "@ant-design/icons";
 
 interface IProps{
@@ -13,7 +13,9 @@ const Captcha:FC<IProps> = (props) => {
     const isHover=useHover(ref)
     const size = useSize(ref);
     const {captcha}=useModel(userModel)
+    const count = useComputed(userModel.refreshCaptchaCountDown)
     const loading = useLoading(userModel.queryCaptcha);
+ 
     const { run } = useDebounceFn(
         async () => {
             await getCaptcha()
@@ -27,12 +29,12 @@ const Captcha:FC<IProps> = (props) => {
     //每60秒刷新一次
     useInterval(() => {
         run()
-    }, 60*1000);
+    }, count);
     useEffect(()=>{
-        if(captcha===null){
+        if(count!==undefined && size){
             run()
         }
-    },[size])
+    },[size,count])
     useEffect(() => {
         if(props.watchData){
             run()

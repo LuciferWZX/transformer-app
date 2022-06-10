@@ -2,18 +2,21 @@ import {Alert, Button, Checkbox, Col, Form, Input, Row} from "antd";
 import React, {FC, useState} from "react";
 import Captcha from "@/pages/login/Captcha";
 import {userModel} from "@/models/userModel";
-import {useLoading} from "foca";
+import {useComputed, useLoading} from "foca";
 import {ServerResult} from "@/types/request";
 interface LoginFormType{
     username:string
     password:string
-    captcha:string
+    captcha?:string
     auto:boolean
 }
 const LoginForm:FC = () => {
     const [form] = Form.useForm<LoginFormType>();
     const loading = useLoading(userModel.accountLogin);
+    const showCaptcha = useComputed(userModel.showCaptcha)
     const [error,setError]=useState<ServerResult<undefined>|undefined>(undefined)
+    const username = Form.useWatch('username', form);
+    const password = Form.useWatch('password', form);
     const onFinish = async (values:LoginFormType) => {
         setError(undefined)
         const data = await userModel.accountLogin({
@@ -44,6 +47,27 @@ const LoginForm:FC = () => {
             )
         }
         return null
+    }
+    //渲染验证码
+    const renderCaptcha=()=>{
+        return(
+            <Form.Item label="验证码" >
+                <Row gutter={8}>
+                    <Col span={12}>
+                        <Form.Item
+                            name="captcha"
+                            noStyle
+                            rules={[{ required: true, message: '请输入验证码' }]}
+                        >
+                            <Input onBlur={event => validCaptcha(event.target.value)} placeholder={"验证码"} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Captcha watchData={error} />
+                    </Col>
+                </Row>
+            </Form.Item>
+        )
     }
   return(
       <Form
@@ -79,28 +103,13 @@ const LoginForm:FC = () => {
           >
               <Input.Password placeholder={"密码"} allowClear={true} />
           </Form.Item>
-          <Form.Item label="验证码" >
-              <Row gutter={8}>
-                  <Col span={12}>
-                      <Form.Item
-                          name="captcha"
-                          noStyle
-                          rules={[{ required: true, message: '请输入验证码' }]}
-                      >
-                          <Input onBlur={event => validCaptcha(event.target.value)} placeholder={"验证码"} />
-                      </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                      <Captcha watchData={error} />
-                  </Col>
-              </Row>
-          </Form.Item>
+          {showCaptcha&&renderCaptcha()}
           <Form.Item name="auto" valuePropName="checked" wrapperCol={{ offset: 7, span: 17 }}>
               <Checkbox>保持登录状态</Checkbox>
           </Form.Item>
         
           <Form.Item wrapperCol={{ offset: 7, span: 17 }}>
-              <Button type="primary" htmlType="submit" block={true} loading={loading}>
+              <Button disabled={username==="" || password === ""} type="primary" htmlType="submit" block={true} loading={loading}>
                   登录
               </Button>
           </Form.Item>

@@ -4,6 +4,7 @@ import {Keyword, LoginLayoutBox} from "@/layouts/loginLayout/style";
 import {ImageBox, OutletBox} from "@/layouts/loginLayout/style";
 import {Image} from "antd";
 import { userModel } from "@/models/userModel";
+import MultiLoginModal from "@/layouts/loginLayout/MultiLoginModal";
 
 
 
@@ -25,6 +26,7 @@ const LoginLayout:FC = () => {
             <OutletBox>
                 <Outlet/>
             </OutletBox>
+            <MultiLoginModal/>
         </LoginLayoutBox>
     )
 }

@@ -1,7 +1,8 @@
-import {useEffect, useLayoutEffect} from "react";
+import {useLayoutEffect} from "react";
 import {AccountLink, LoginBox, LoginTitle} from "@/pages/login/style";
 import LoginForm from "./LoginForm";
 import {Col, Row} from "antd";
+import {Modal} from "@/components";
 
 const LoginPage = () => {
     useLayoutEffect(() => {
@@ -9,6 +10,7 @@ const LoginPage = () => {
     }, []);
     return(
         <LoginBox>
+            <Modal icon={"warning"}/>
             <Row>
                 <Col offset={7} span={17} >
                     <LoginTitle>

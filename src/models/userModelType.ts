@@ -1,7 +1,10 @@
 export interface User{
-    multi_login: boolean
     token:string
     username:string
+}
+export interface UserLoginInfo{
+    multi_login: boolean
+    token:string
 }
 //系统设置的类型
 export interface SystemConfig{
@@ -25,8 +28,8 @@ export interface CaptchaRequestParam {
 }
 // 用户登录请求的参数
 export interface AccountLoginParams {
-    captcha: string
-    captcha_id: string
+    captcha?: string
+    captcha_id?: string
     keep_login: boolean
     password: string
     username: string

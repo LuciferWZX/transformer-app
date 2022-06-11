@@ -14,6 +14,10 @@ export default defineConfig({
           libName: "antd",
           style: (name) => `antd/es/${name}/style`,
         },
+        {
+          libName: "nprogress",
+          style: () => "nprogress/nprogress.css",
+        },
       ],
     })
   ],

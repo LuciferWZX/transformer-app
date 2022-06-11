@@ -1,4 +1,4 @@
-import {defineModel} from "foca";
+import {defineModel, store} from "foca";
 import {
     AccountLoginParams,
     CaptchaRequestParam,
@@ -7,9 +7,9 @@ import {
     User,
     UserLoginInfo
 } from "@/models/userModelType";
-import {getCaptcha, getSystemConfig, login, loginEnsure, tokenLogin} from "@/servers/user";
+import {getCaptcha, getSystemConfig, login, loginEnsure, logout, tokenLogin} from "@/servers/user";
 import {ServerResult} from "@/types/request";
-import {parseJwt} from "@/utils/util";
+import {handleUsername, parseJwt} from "@/utils/util";
 import {message} from "antd";
 export interface UserModelState {
     user:User|null
@@ -26,13 +26,16 @@ const initialState:UserModelState = {
 export const userModel = defineModel('user',{
     initialState,
     events:{
-        onInit(){
-            console.log("之前的用户缓存：",this.state.user)
-            this.removeLoginInfo()
-            this.removeCaptcha()
-            if(this.state.user){
-                this.verifyToken(this.state.user.token)
-            }
+        async onInit(){
+            console.log("初始化user模块")
+           
+            //-------------以下代码先注释掉（这个登录会导致再次登录有人登录中）-----------
+            // this.removeLoginInfo()
+            // this.removeCaptcha()
+            // if(this.state.user){
+            //     this.verifyToken(this.state.user.token)
+            // }
+            //--------------------------------------------------------------------
         }
     },
     actions:{
@@ -146,14 +149,19 @@ export const userModel = defineModel('user',{
                 }
             }
             return result
+        },
+        //账户退出登录
+        async userLogout(success?:Function,failed?:Function){
+            const result = await logout()
+            if(result && result.code === 0){
+                //清空所有数据
+                store.refresh();
+                success?.()
+                return result
+            }
+            failed?.()
+            return result
             
-           
-            //.....
-            // this.setState(state => {
-            //     state.user = {
-            //         username:"developer"
-            //     }
-            // })
         }
     },
     computed:{
@@ -171,6 +179,16 @@ export const userModel = defineModel('user',{
                 return undefined
             }
             return 60*1000
+        },
+        //根据不同的用户名生成不同的颜色和前两个字符
+        displayAvatarInfo(){
+            if(this.state.user?.username){
+                return handleUsername(this.state.user.username)
+            }
+            return {
+                str:"未登录",
+                color:"rgba(192, 196, 209, 1)"
+            }
         }
     }
 })

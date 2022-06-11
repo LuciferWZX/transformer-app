@@ -6,6 +6,7 @@ import {BrowserRouter as Router} from 'react-router-dom'
 import App from "@/app"
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
+
 const render = () => {
     const root = ReactDOM.createRoot(document.getElementById('root')!)
     

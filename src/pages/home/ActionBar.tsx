@@ -27,7 +27,7 @@ const ActionBar:FC = () => {
                 className={'action-input'}
                 placeholder="搜索"
                 allowClear={true} />
-            <Button icon={<PlusOutlined />} type={"primary"}>新建表单</Button>
+            <Button onClick={()=>formModel.updateAddFormVisible(true)} icon={<PlusOutlined />} type={"primary"}>新建表单</Button>
         </ActionBarBox>
     )
 }

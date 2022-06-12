@@ -9,6 +9,7 @@ import SettingPage from "@/pages/setting"
 import "@/styles/global.less"
 import Auth from "@/wrappers/auth";
 import LoginAuth from "@/wrappers/loginAuth";
+import Editor from "@/pages/editor";
 const App = () => {
     return(
         <Routes>
@@ -16,6 +17,7 @@ const App = () => {
                 <Route element={<Auth><MainLayout/></Auth>}>
                     <Route index element={<HomePage/>}/>
                     <Route path={'setting'} element={<SettingPage/>}/>
+                    <Route path={'editor/:id'} element={<Editor/>}/>
                 </Route>
                 <Route path={'login'} element={<LoginAuth><LoginLayout/></LoginAuth>}>
                     <Route index element={<LoginPage/>}/>

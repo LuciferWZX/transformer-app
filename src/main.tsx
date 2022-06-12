@@ -11,15 +11,16 @@ const render = () => {
     const root = ReactDOM.createRoot(document.getElementById('root')!)
     
     root.render(
-        <React.StrictMode>
-            <FocaProvider>
-                <Router>
-                    <ConfigProvider locale={zhCN}>
-                        <App/>
-                    </ConfigProvider>
-                </Router>
-            </FocaProvider>
-        </React.StrictMode>
+        // <React.StrictMode>
+        //
+        // </React.StrictMode>
+        <FocaProvider>
+            <Router>
+                <ConfigProvider locale={zhCN}>
+                    <App/>
+                </ConfigProvider>
+            </Router>
+        </FocaProvider>
     )
 }
 render()

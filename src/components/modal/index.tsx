@@ -11,12 +11,12 @@ const Modal:FC<IProps> = (props) => {
     const renderTitle=():React.ReactNode=>{
         return (
             <IconTitle>
-                <div className={classnames({
-                    'modal-title-leading':true,
-                    'warning':icon === "warning"
+                {icon && <div className={classnames({
+                    'modal-title-leading': true,
+                    'warning': icon === "warning"
                 })}>
-                    <ExclamationCircleFilled />
-                </div>
+                    <ExclamationCircleFilled/>
+                </div>}
                 <div className={'modal-title'}>
                     {title}
                 </div>

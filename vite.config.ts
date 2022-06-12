@@ -13,18 +13,14 @@ export default defineConfig({
         {
           libName: "antd",
           style: (name) => `antd/es/${name}/style`,
-        },
-        {
-          libName: "nprogress",
-          style: () => "nprogress/nprogress.css",
-        },
+        }
       ],
     })
   ],
   server:{
     proxy:{
       '/api': {
-        target: devConfig.reqUrl.jjtest,
+        target: devConfig.reqUrl.backend,
         changeOrigin: true,
       },
     }

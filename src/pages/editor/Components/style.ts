@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {Drawer} from "antd";
 
 export const ComponentsBox = styled.div`
     width: 200px;

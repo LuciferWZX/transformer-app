@@ -15,8 +15,14 @@ export const ImageBox = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    .title-box{
+    
+    }
+    .vite-logo{
+        width: 100px;
+        height: 100px;
+    }
     .img-tip{
-        display: inline-block;
         font-size: 24px;
         color: #494b83;
         font-weight: 200;

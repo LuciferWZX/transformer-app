@@ -2,12 +2,9 @@ import React, {FC} from "react";
 import {ComponentsBox} from "@/pages/editor/Components/style";
 
 import ComponentContainer from "@/pages/editor/Components/ComponentContainer";
-interface IProps{
-    style?:React.CSSProperties
-    
-}
-const Components:FC<IProps> = (props) => {
-    const {style}=props
+
+const Components:FC = () => {
+  
     let data:any ={
         "container":{
             name:"容器",
@@ -21,9 +18,7 @@ const Components:FC<IProps> = (props) => {
     };
     let order = ["container"]
     return(
-        <ComponentsBox
-            style={style}
-        >
+        <ComponentsBox>
             {order.map(item=>{
                 const components = data[item].components
                 return (

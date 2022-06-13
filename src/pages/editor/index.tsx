@@ -1,7 +1,11 @@
-import {EditorPageBox} from "@/pages/editor/style";
+import {EditorCenter, EditorPageBox} from "@/pages/editor/style";
 import { DragDropContext } from 'react-beautiful-dnd';
 import Components from "@/pages/editor/Components";
 import Canvas from "@/pages/editor/Canvas";
+import Dashboard from "@/pages/editor/Dashboard";
+import Attribute from "@/pages/editor/Attribute";
+import ComponentDrawer from "@/pages/editor/Components/Drawer";
+
 const EditorPage = () => {
     const onBeforeCapture=()=>{
         console.log("onBeforeCapture")
@@ -27,8 +31,14 @@ const EditorPage = () => {
             onDragEnd={onDragEnd}
         >
             <EditorPageBox>
-                <Components/>
-                <Canvas/>
+                <Dashboard/>
+                <EditorCenter>
+                    {/*<Components/>*/}
+                    <ComponentDrawer/>
+                    <Canvas/>
+                </EditorCenter>
+                
+                <Attribute/>
             </EditorPageBox>
         </DragDropContext>
     )

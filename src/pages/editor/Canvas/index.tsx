@@ -1,4 +1,5 @@
 import {CanvasBox} from "@/pages/editor/Canvas/style";
+import Board from "@/pages/editor/Canvas/board";
 
 const Canvas = () => {
   return(
@@ -26,6 +27,7 @@ const Canvas = () => {
           {/*        </div>*/}
           {/*    )}*/}
           {/*</Droppable>*/}
+          <Board />
       </CanvasBox>
   )
 }

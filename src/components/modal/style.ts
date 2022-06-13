@@ -39,3 +39,7 @@ export const IconTitle = styled.div`
         flex: 1;
     }
 `
+export const SearchBarBox = styled.div`
+    height: 40px;
+    padding: 8px;
+`

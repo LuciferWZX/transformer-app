@@ -1,11 +1,20 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import {Collapse, Drawer} from "antd";
 
-export const ComponentDrawerBox = styled(Drawer)`
+export const ComponentDrawerBox = styled.div<{visible:boolean}>`
     position: absolute;
-    .ant-drawer-body{
-        padding: 0;
-    }
+    width: 217px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+    ${({visible})=>{
+        if(!visible){
+            return css`
+                width: 0;
+                overflow: hidden;
+            `
+        }
+    }};
 `
 export const DrawerHeader = styled.div`
     display: flex;
@@ -40,4 +49,5 @@ export const GridBox = styled.div`
     grid-template-columns: repeat(3,1fr);
     background-color: rgba(247, 247, 247, 1);
     gap: 1px;
+    padding: 1px;
 `

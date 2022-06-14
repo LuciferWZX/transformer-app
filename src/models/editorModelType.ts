@@ -1,10 +1,8 @@
 import {IconName} from "@/types/icon";
 
-export interface ComponentItem{
-   [key:ComponentKind]:{
-       name:string,
-       children:SchemaType[]
-   }
+export interface ComponentContainer{
+    type:ComponentKind
+    name:string,
 }
 export interface BaseSchema{
     type:ComponentType

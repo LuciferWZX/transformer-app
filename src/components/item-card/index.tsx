@@ -8,6 +8,7 @@ interface IProps{
     className?:string
     style?:React.CSSProperties
     onClick?:MouseEventHandler<HTMLDivElement>
+    [key:any]:any
 }
 const ItemCard:FC<IProps> = (props) => {
     const {icon,customIcon,style,className,children,onClick}=props

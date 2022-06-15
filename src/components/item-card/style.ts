@@ -6,6 +6,7 @@ export const ItemCardBox = styled.div`
     text-align: center;
     background-color: white;
     cursor: pointer;
+    user-select: none;
     .card-icon{
         >i{
             font-size: 18px;

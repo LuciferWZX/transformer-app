@@ -10,7 +10,7 @@ import {
     DragMoveEvent,
     DragOverEvent,
     DragOverlay,
-    DragStartEvent
+    DragStartEvent, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors
 } from "@dnd-kit/core";
 import React, {useState} from "react";
 import {restrictToWindowEdges} from "@dnd-kit/modifiers";
@@ -19,27 +19,40 @@ import {createPortal} from "react-dom";
 import Draggable from "@/pages/editor/Draggable";
 
 const EditorPage = () => {
-    // const [items] = useState(['1', '2', '3', '4', '5']);
-    // const [activeId, setActiveId] = useState(null);
+    
+    const touchSensor = useSensor(TouchSensor, {
+        activationConstraint: {
+            delay: 250,
+            tolerance: 5,
+        },
+    });
+    const mouseSensor = useSensor(MouseSensor,{
+        activationConstraint: {
+            delay: 250,
+            tolerance: 5,
+        },
+    });
+    const keyboardSensor = useSensor(KeyboardSensor);
+    const sensors = useSensors(touchSensor, mouseSensor, keyboardSensor);
     const onDragEnd=(event:DragEndEvent)=>{
+        //console.log("--------onDragEnd:event",event)
         editorModel.updateComponentListVisible(true)
         editorModel.updateDraggedId(null)
-        console.log("onDragEnd:event",event)
-        // setActiveId(null);
+        editorModel.handleDragEndEvent(event)
     }
     const onDragStart=(event:DragStartEvent)=>{
-        editorModel.updateComponentListVisible(false)
         editorModel.updateDraggedId(event.active.id as string)
-        console.log("onDragStart:event",event)
-        // setActiveId(event.active.id);
+        //console.log("--------onDragStart:event",event)
+        
     }
     const onDragMove=(event:DragMoveEvent)=>{
-        console.log("onDragMove:event",event)
+        editorModel.updateComponentListVisible(false)
+        //console.log("--------onDragMove:event",event)
     }
     const onDragCancel=(event:DragCancelEvent)=>{
         editorModel.updateComponentListVisible(true)
         editorModel.updateDraggedId(null)
-        console.log("onDragCancel:event",event)
+        //console.log("--------onDragCancel:event",event)
     }
     const onDragOver=(event:DragOverEvent)=>{
        
@@ -49,10 +62,12 @@ const EditorPage = () => {
         <DndContext
             onDragEnd={onDragEnd}
             onDragStart={onDragStart}
-            //onDragMove={onDragMove}
+            onDragMove={onDragMove}
             onDragCancel={onDragCancel}
             //onDragOver={onDragOver}
+            //modifiers={[restrictToWindowEdges]}
             modifiers={[restrictToWindowEdges]}
+            sensors={sensors}
         >
             <EditorPageBox>
                 {/*<div>*/}

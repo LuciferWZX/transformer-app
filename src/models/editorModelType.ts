@@ -1,4 +1,6 @@
 import {IconName} from "@/types/icon";
+import {TextInputSchema} from "@/components/text-input";
+import {UniqueIdentifier} from "@dnd-kit/core";
 
 export interface ComponentContainer{
     type:ComponentKind
@@ -33,17 +35,22 @@ export interface NumberInputCollectionType extends BaseCollectionType{
 }
 //基础的schema类型
 export interface BaseSchema {
-    id:string,
-    type:ComponentType,
+    id:UniqueIdentifier
+    type:ComponentType
+    name:string
     parentId?:string
-    childrenIds:string[]
+    childrenIds:UniqueIdentifier[]|null
+    icon?:IconName
 }
 //页面schema
 export interface PageSchema extends BaseSchema{
     config:null
 }
+//schema类型
+export type SchemaType = PageSchema
+    |TextInputSchema
 //全部的schema
 export interface GlobalSchema{
     config:null,
-    schemas:PageSchema[]
+    schemas:SchemaType[]
 }

@@ -1,5 +1,11 @@
 import React, {FC} from "react";
-import { CollapseBox, ComponentDrawerBox, DrawerHeader, GridBox} from "@/pages/editor/Components/Drawer/style";
+import {
+    CollapseBox,
+    ComponentDrawerBox,
+    DraggableItemBox,
+    DrawerHeader,
+    GridBox
+} from "@/pages/editor/Components/Drawer/style";
 import SearchBar from "@/components/modal/SearchBar";
 import {CaretRightOutlined} from "@ant-design/icons";
 import {useModel} from "foca";
@@ -7,6 +13,7 @@ import {editorModel} from "@/models/editorModel";
 import DraggableItem from "@/pages/editor/Components/Drawer/DraggableItem";
 import {DragOverlay} from "@dnd-kit/core";
 import {snapCenterToCursor} from "@dnd-kit/modifiers";
+import IconFont from "@/components/icon-font";
 
 const { Panel } = CollapseBox;
 const ComponentDrawer:FC = () => {
@@ -23,9 +30,9 @@ const ComponentDrawer:FC = () => {
         const item = components.find(component=>component.type === draggedId)
         if(item){
             return(
-                <DraggableItem style={{width:70}} id={item.type} icon={item.icon}>
-                    {item.name}
-                </DraggableItem>
+                <DraggableItemBox>
+                    <IconFont iconName={item.icon}/>{item.name}
+                </DraggableItemBox>
             )
         }
         return null
@@ -56,7 +63,7 @@ const ComponentDrawer:FC = () => {
                                             </DraggableItem>
                                         )
                                     })}
-
+                        
                                 </GridBox>
                                 <DragOverlay modifiers={[snapCenterToCursor]} dropAnimation={null}>
                                     {renderDraggedItem()}
@@ -64,7 +71,7 @@ const ComponentDrawer:FC = () => {
                             </Panel>
                         )
                     })}
-
+        
                 </CollapseBox>
             </div>
         </ComponentDrawerBox>

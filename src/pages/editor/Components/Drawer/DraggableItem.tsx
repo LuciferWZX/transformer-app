@@ -13,10 +13,13 @@ const DraggableItem:FC<IProps> = (props) => {
     const {id,icon,children}=props
     const {setNodeRef, listeners,attributes,transform,isDragging} = useDraggable({
         id: id,
+        data:{
+            justDisplay:true
+        }
     });
     const style = {
-        transform: CSS.Translate.toString(transform),
-        opacity: isDragging ? 1 : undefined
+        //transform: CSS.Translate.toString(transform),
+        //opacity: isDragging ? 1 : undefined
         
     };
     return(

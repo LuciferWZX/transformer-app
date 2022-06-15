@@ -1,5 +1,6 @@
 import styled, {css} from "styled-components";
-import {Collapse} from "antd";
+import {Collapse, Space} from "antd";
+import DraggableItem from "@/pages/editor/Components/Drawer/DraggableItem";
 
 export const ComponentDrawerBox = styled.div<{visible:boolean}>`
     position: absolute;
@@ -9,11 +10,13 @@ export const ComponentDrawerBox = styled.div<{visible:boolean}>`
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
     transition-duration: 0.2s;
     transition-property: width;
+    overflow: hidden;
+    z-index: 2;
     ${({visible})=>{
         if(!visible){
             return css`
                 width: 0;
-                overflow: hidden;
+                
             `
         }
     }};
@@ -55,4 +58,16 @@ export const GridBox = styled.div`
     background-color: rgba(247, 247, 247, 1);
     gap: 1px;
     padding: 1px;
+`
+export const DraggableItemBox = styled(Space)`
+    height: 28px;
+    background: #FFFFFF;
+    display:inline-flex;
+    align-items: center;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    user-select: none;
+    cursor: grabbing;
+    padding: 6px 8px;
+    white-space: nowrap;
 `

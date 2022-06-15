@@ -4,7 +4,7 @@ export interface ComponentContainer{
     type:ComponentKind
     name:string,
 }
-export interface BaseSchema{
+export interface BaseCollectionType{
     type:ComponentType
     name:string
     kind:ComponentKind
@@ -13,19 +13,37 @@ export interface BaseSchema{
 //组件的种类
 export type ComponentKind = "Container"|"DataEntry"
 //组件的类型
-export type ComponentType = "Input"|"NumberInput"|"PasswordInput"|"TextareaInput"
-export type SchemaType = InputType|TextareaInputType|PasswordInputType|NumberInputType
-export interface InputType extends BaseSchema{
-    value?:string,
-    defaultValue?:string
-}
-export interface PasswordInputType extends InputType{
-    isShow?:boolean
-}
-export interface TextareaInputType extends InputType{
+export type ComponentType = "Input"|"NumberInput"|"PasswordInput"|"TextareaInput"|"Page"
+export type ComponentCollectionType =
+    InputCollectionType
+    |PasswordInputCollectionType
+    |TextareaInputCollectionType
+    |NumberInputCollectionType
+export interface InputCollectionType extends BaseCollectionType{
 
 }
-export interface NumberInputType extends BaseSchema{
-    value?:number,
-    defaultValue?:number
+export interface PasswordInputCollectionType extends InputCollectionType{
+
+}
+export interface TextareaInputCollectionType extends InputCollectionType{
+
+}
+export interface NumberInputCollectionType extends BaseCollectionType{
+
+}
+//基础的schema类型
+export interface BaseSchema {
+    id:string,
+    type:ComponentType,
+    parentId?:string
+    childrenIds:string[]
+}
+//页面schema
+export interface PageSchema extends BaseSchema{
+    config:null
+}
+//全部的schema
+export interface GlobalSchema{
+    config:null,
+    schemas:PageSchema[]
 }

@@ -6,6 +6,7 @@ import {useModel} from "foca";
 import {editorModel} from "@/models/editorModel";
 import DraggableItem from "@/pages/editor/Components/Drawer/DraggableItem";
 import {DragOverlay} from "@dnd-kit/core";
+import {snapCenterToCursor} from "@dnd-kit/modifiers";
 
 const { Panel } = CollapseBox;
 const ComponentDrawer:FC = () => {
@@ -31,11 +32,12 @@ const ComponentDrawer:FC = () => {
     }
     return(
         <ComponentDrawerBox visible={visible}>
-            <DrawerHeader>
-                <div className={'draw-title'}>组件库</div>
-                <div><i className="iconfont icon-close2 modal-close" onClick={closeDrawer} /></div>
-            </DrawerHeader>
-            <SearchBar/>
+            <div className={'support-box'}>
+                <DrawerHeader>
+                    <div className={'draw-title'}>组件库</div>
+                    <div><i className="iconfont icon-close2 modal-close" onClick={closeDrawer} /></div>
+                </DrawerHeader>
+                <SearchBar/>
                 <CollapseBox
                     bordered={false}
                     defaultActiveKey={['DataEntry']}
@@ -54,17 +56,17 @@ const ComponentDrawer:FC = () => {
                                             </DraggableItem>
                                         )
                                     })}
-                                    
+
                                 </GridBox>
-                                <DragOverlay dropAnimation={null}>
+                                <DragOverlay modifiers={[snapCenterToCursor]} dropAnimation={null}>
                                     {renderDraggedItem()}
                                 </DragOverlay>
                             </Panel>
                         )
                     })}
-                    
+
                 </CollapseBox>
-            
+            </div>
         </ComponentDrawerBox>
     )
 }

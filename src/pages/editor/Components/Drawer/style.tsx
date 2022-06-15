@@ -1,5 +1,5 @@
 import styled, {css} from "styled-components";
-import {Collapse, Drawer} from "antd";
+import {Collapse} from "antd";
 
 export const ComponentDrawerBox = styled.div<{visible:boolean}>`
     position: absolute;
@@ -7,6 +7,8 @@ export const ComponentDrawerBox = styled.div<{visible:boolean}>`
     height: 100%;
     background-color: white;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+    transition-duration: 0.2s;
+    transition-property: width;
     ${({visible})=>{
         if(!visible){
             return css`
@@ -15,6 +17,9 @@ export const ComponentDrawerBox = styled.div<{visible:boolean}>`
             `
         }
     }};
+    .support-box{
+      width: 217px;
+    }
 `
 export const DrawerHeader = styled.div`
     display: flex;

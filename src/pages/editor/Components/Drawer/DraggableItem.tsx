@@ -20,7 +20,12 @@ const DraggableItem:FC<IProps> = (props) => {
         
     };
     return(
-        <div ref={setNodeRef}  style={{...style,...props.style}} {...listeners} {...attributes}>
+        <div
+            ref={setNodeRef}
+            style={{...style,...props.style}}
+            {...listeners}
+            {...attributes}
+        >
             <ItemCard style={{width:'100%'}} icon={icon}>
                 {children}
             </ItemCard>

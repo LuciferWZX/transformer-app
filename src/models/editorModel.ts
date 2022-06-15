@@ -1,12 +1,15 @@
 import {defineModel} from "foca";
-import {ComponentContainer, SchemaType} from "@/models/editorModelType";
+import {ComponentContainer, ComponentCollectionType} from "@/models/editorModelType";
 import {IconName} from "@/types/icon";
+import {GlobalSchema} from "./editorModelType";
 
 export interface EditorModelState{
-    components:SchemaType[]
+    components:ComponentCollectionType[]
     componentsContainer:ComponentContainer[]
     componentListVisible:boolean
     draggedId:string|null
+    schema:GlobalSchema
+    currentPageId:string //当前页面的id
 }
 const initialState:EditorModelState={
     components:[{
@@ -35,7 +38,19 @@ const initialState:EditorModelState={
         {type:"DataEntry",name:"数据录入"},
     ],
     componentListVisible:true,
-    draggedId:null
+    draggedId:null,
+    currentPageId:"initial-page-id",
+    schema:{
+        config:null,
+        schemas:[
+            {
+                id:"initial-page",
+                type:"Page",
+                config:null,
+                childrenIds:[]
+            }
+        ]
+    }
 }
 
 export const editorModel = defineModel('editor',{
@@ -58,17 +73,14 @@ export const editorModel = defineModel('editor',{
             state.draggedId = id
         },
         //更新正在拖拉的id
-        updateComponents(state,components:SchemaType[]){
+        updateComponents(state,components:ComponentCollectionType[]){
             state.components = components
         }
     },
     computed:{
-        getDraggedItem(){
-            //console.log(111,this.state.draggedId)
-            console.log(111,this.state.draggedId)
-            console.log(222,this.state)
-            return null
-            //return this.state.components.find(component=>component.type === this.state.draggedId)
+        //找到当前page的
+        getCurrentPageChildren(){
+            return this.state.schema.schemas.find(schema=>schema.id === this.state.currentPageId)
         }
     }
 })

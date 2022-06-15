@@ -25,7 +25,7 @@ const Page:FC<IProps> = (props) => {
         }
     });
     const style = {
-        backgroundColor: isOver ? 'orange' : undefined,
+        //backgroundColor: isOver ? 'orange' : undefined,
     };
     const render=(id:UniqueIdentifier):React.ReactNode=>{
         const schema = editorModel.findComponentById(id)
@@ -48,8 +48,7 @@ const Page:FC<IProps> = (props) => {
         return null
     }
     return(
-        <StyledPage ref={setNodeRef} style={style}>
-            this is page {id}
+        <StyledPage ref={setNodeRef} style={style} isOver={isOver}>
             <SortableContext
                 items={childrenIds}
                 strategy={verticalListSortingStrategy}

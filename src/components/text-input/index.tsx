@@ -10,7 +10,7 @@ export interface TextInputSchema extends BaseSchema{
 const TextInput:FC<TextInputSchema> = (props) => {
     return(
         <StyledTextInput>
-            <Input />
+            <Input defaultValue={props.id} />
         </StyledTextInput>
     )
 }

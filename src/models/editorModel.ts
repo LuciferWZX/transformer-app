@@ -2,7 +2,7 @@ import {defineModel} from "foca";
 import {ComponentContainer, ComponentCollectionType, SchemaType, ComponentType} from "@/models/editorModelType";
 import {IconName} from "@/types/icon";
 import {GlobalSchema} from "./editorModelType";
-import {DragEndEvent, UniqueIdentifier} from "@dnd-kit/core";
+import {DragEndEvent, DragOverEvent, UniqueIdentifier} from "@dnd-kit/core";
 import {generateComponent} from "@/utils/util";
 
 export interface EditorModelState{
@@ -92,14 +92,35 @@ export const editorModel = defineModel('editor',{
                 const targetCurrent=event.over.data.current
                 const activeCurrent=event.active.data.current
                 if(activeCurrent?.justDisplay && targetCurrent?.inCanvas){
-                    //从左侧列表拉过来-------->画布中
+                    //从左侧列表拉过来-------->画布中的page
                     if(targetCurrent?.isPage){
                         //说明是Page类型
-                        console.log("1")
-                        editorModel.canvasAddComponent(event.over.id as string,event.active.id as ComponentType,true)
+                        console.log("in-page")
+                        editorModel.canvasAddComponent(event.over.id as string,event.active.id as ComponentType, {isPage:true})
+                    }else{
+                        //从左侧列表拉过来-------->画布中的container
+                        console.log("in-container")
+
                     }
                 }
             }
+        },
+        handleDragOverEvent(state,event:DragOverEvent){
+            if(event.over && event.active){
+                const targetCurrent=event.over.data.current
+                const activeCurrent=event.active.data.current
+                console.log("event.over:",event.over)
+                console.log("event.activ:",event.active)
+                if(activeCurrent?.justDisplay && targetCurrent?.inCanvas){
+                    //从左侧列表拉过来-------->画布中,当前拖得一定是原始组件
+
+                    const containerId = targetCurrent?.parentId
+                    if(containerId){
+                        editorModel.canvasAddComponent(containerId,event.active.id as string as ComponentType,{isHover:true})
+                    }
+                }
+            }
+
         },
         //画布新增组件
         /***
@@ -107,16 +128,32 @@ export const editorModel = defineModel('editor',{
          * @param state
          * @param parentId 需要加载哪个id容器里面
          * @param type 生成组件的类型
-         * @param isPage 是否是page类型（是的话就是第一层，其余可以直接通用方法）
+         * @param config
          */
-        canvasAddComponent(state,parentId:string,type:ComponentType,isPage?:boolean){
-            const newComponent = generateComponent(type)
+        canvasAddComponent(state,parentId:UniqueIdentifier,type:ComponentType,config?:{isPage?:boolean,isHover?:boolean}){
+            const isPage=config?.isPage
+            const isHover=config?.isHover
+            let newComponent = generateComponent(type)
             if(newComponent){
                 if(isPage){
                     const parent = state.schema.schemas.find(page=>page.id === parentId)
                     if(parent){
                         parent?.childrenIds?.push(newComponent.id)
                         state.schema.schemas.push(newComponent)
+                    }
+                }else{
+                    const parent = state.schema.schemas.find(page=>page.id === parentId)
+                    if(parent){
+                        if(isHover){
+                            //说明是hover的时候
+                            newComponent.id = type
+                            if(!parent?.childrenIds?.includes(type)){
+                                //不包含的时候才添加
+                                parent?.childrenIds?.push(newComponent.id)
+                                state.schema.schemas.push(newComponent)
+                            }
+                        }
+
                     }
                 }
             }else{

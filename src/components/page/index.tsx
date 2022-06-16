@@ -17,7 +17,10 @@ interface IProps extends PageSchema{
 const Page:FC<IProps> = (props) => {
     const {id,childrenIds}=props
     const draggedId = useModel(editorModel,state => state.draggedId)
-    const {setNodeRef,isOver} = useDroppable({
+    const {
+        setNodeRef,
+        //isOver
+    } = useDroppable({
         id: id,
         data:{
             inCanvas:true,
@@ -29,40 +32,45 @@ const Page:FC<IProps> = (props) => {
     };
     const render=(id:UniqueIdentifier):React.ReactNode=>{
         const schema = editorModel.findComponentById(id)
-       
         if(schema){
             return renderSchema(schema)
         }
         return null
     }
     const renderDraggedItem=()=>{
-        const schema = editorModel.findComponentById(id)
-        if(draggedId&&childrenIds.includes(draggedId)&&schema){
-            
+        if(draggedId&&childrenIds.includes(draggedId)){
+            const draggedSchema = editorModel.findComponentById(draggedId)
             return(
-                <DraggableItemBox>
-                    <IconFont iconName={schema.icon}/>{schema.name}
-                </DraggableItemBox>
+                <DragOverlay modifiers={[snapCenterToCursor]}>
+                    {draggedSchema?(
+                        <DraggableItemBox >
+                            <IconFont iconName={draggedSchema.icon}/>{draggedSchema.name}
+                        </DraggableItemBox>
+                    ):null}
+                </DragOverlay>
             )
         }
         return null
     }
     return(
-        <StyledPage ref={setNodeRef} style={style} isOver={isOver}>
+
+
             <SortableContext
                 items={childrenIds}
-                strategy={verticalListSortingStrategy}
-            >
-                {childrenIds.map(id => {
-                    return (
-                        <SortableItem key={id} id={id}>
-                            {render(id)}
-                        </SortableItem>
-                    )
-                })}
-               
+                strategy={verticalListSortingStrategy}>
+                <StyledPage ref={setNodeRef} style={style} isOver={false}>
+                    {childrenIds.map(_id => {
+                        return (
+                            <SortableItem inCanvas={true} parentId={id} key={_id} id={_id}>
+                                {render(_id)}
+                            </SortableItem>
+                        )
+                    })}
+                    {renderDraggedItem()}
+                </StyledPage>
             </SortableContext>
-        </StyledPage>
+
+
     )
 }
 export default Page

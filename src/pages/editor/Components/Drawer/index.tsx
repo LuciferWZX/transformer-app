@@ -65,15 +65,16 @@ const ComponentDrawer:FC = () => {
                                     })}
                         
                                 </GridBox>
-                                <DragOverlay modifiers={[snapCenterToCursor]} dropAnimation={null}>
-                                    {renderDraggedItem()}
-                                </DragOverlay>
+
                             </Panel>
                         )
                     })}
         
                 </CollapseBox>
             </div>
+            <DragOverlay modifiers={[snapCenterToCursor]} dropAnimation={null}>
+                {renderDraggedItem()}
+            </DragOverlay>
         </ComponentDrawerBox>
     )
 }

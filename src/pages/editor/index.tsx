@@ -4,13 +4,14 @@ import Dashboard from "@/pages/editor/Dashboard";
 import Attribute from "@/pages/editor/Attribute";
 import ComponentDrawer from "@/pages/editor/Components/Drawer";
 import {
+    closestCenter, closestCorners,
     DndContext,
     DragCancelEvent,
     DragEndEvent,
     DragMoveEvent,
     DragOverEvent,
     DragOverlay,
-    DragStartEvent, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors
+    DragStartEvent, KeyboardSensor, MeasuringStrategy, MouseSensor, TouchSensor, useSensor, useSensors
 } from "@dnd-kit/core";
 import React, {useState} from "react";
 import {restrictToWindowEdges} from "@dnd-kit/modifiers";
@@ -47,7 +48,7 @@ const EditorPage = () => {
     }
     const onDragMove=(event:DragMoveEvent)=>{
         editorModel.updateComponentListVisible(false)
-        //console.log("--------onDragMove:event",event)
+        //console.log("--------onDragMove:event",event.over?.id)
     }
     const onDragCancel=(event:DragCancelEvent)=>{
         editorModel.updateComponentListVisible(true)
@@ -55,7 +56,7 @@ const EditorPage = () => {
         //console.log("--------onDragCancel:event",event)
     }
     const onDragOver=(event:DragOverEvent)=>{
-       
+        editorModel.handleDragOverEvent(event)
         console.log("onDragOver:event",event)
     }
     return(
@@ -64,8 +65,14 @@ const EditorPage = () => {
             onDragStart={onDragStart}
             onDragMove={onDragMove}
             onDragCancel={onDragCancel}
-            //onDragOver={onDragOver}
+            onDragOver={onDragOver}
+            collisionDetection={closestCorners}
             //modifiers={[restrictToWindowEdges]}
+            // measuring={{
+            //     draggable:{
+            //         strategy: MeasuringStrategy.Always,
+            //     }
+            // }}
             modifiers={[restrictToWindowEdges]}
             sensors={sensors}
         >

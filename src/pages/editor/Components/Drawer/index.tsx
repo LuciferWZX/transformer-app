@@ -14,7 +14,7 @@ import DraggableItem from "@/pages/editor/Components/Drawer/DraggableItem";
 import {DragOverlay} from "@dnd-kit/core";
 import {snapCenterToCursor} from "@dnd-kit/modifiers";
 import IconFont from "@/components/icon-font";
-
+import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable";
 const { Panel } = CollapseBox;
 const ComponentDrawer:FC = () => {
     const {containers,components,visible,draggedId} = useModel(editorModel,state => ({
@@ -51,25 +51,30 @@ const ComponentDrawer:FC = () => {
                     expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
                     className="site-collapse-custom-collapse"
                 >
-                    {containers.map(container=>{
-                        const data = components.filter(component=>component.kind === container.type)
-                        return(
-                            <Panel key={container.type} header={container.name} >
-                                <GridBox>
-                                    {data.map((item,index)=>{
-                                        return(
-                                            <DraggableItem key={item.type} id={item.type} icon={item.icon}>
-                                                {item.name}
-                                            </DraggableItem>
-                                        )
-                                    })}
-                        
-                                </GridBox>
-
-                            </Panel>
-                        )
-                    })}
-        
+                    
+                        {containers.map(container=>{
+                            const data = components.filter(component=>component.kind === container.type)
+                            return(
+                                <Panel key={container.type} header={container.name} >
+                                    <SortableContext
+                                        items={data.map(item=>item.type)}
+                                        strategy={horizontalListSortingStrategy}>
+                                        <GridBox>
+                                            
+                                            {data.map((item,index)=>{
+                                                return(
+                                                    <DraggableItem key={item.type} id={item.type} icon={item.icon}>
+                                                        {item.name}
+                                                    </DraggableItem>
+                                                )
+                                            })}
+                                
+                                        </GridBox>
+                                    </SortableContext>
+                                </Panel>
+                            )
+                        })}
+                   
                 </CollapseBox>
             </div>
             <DragOverlay modifiers={[snapCenterToCursor]} dropAnimation={null}>

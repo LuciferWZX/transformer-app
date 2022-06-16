@@ -1,7 +1,7 @@
 import styled, {css} from "styled-components";
 
 export const StyledPage = styled.div<{isOver:boolean}>`
-    height: 100%;
+    min-height: 100%;
     ${({isOver})=>{
         if(isOver){
             return css`

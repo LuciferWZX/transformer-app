@@ -23,8 +23,7 @@ const Page:FC<IProps> = (props) => {
     } = useDroppable({
         id: id,
         data:{
-            inCanvas:true,
-            isPage:true
+            parentId:null
         }
     });
     const style = {
@@ -66,7 +65,7 @@ const Page:FC<IProps> = (props) => {
                             </SortableItem>
                         )
                     })}
-                    {renderDraggedItem()}
+                    {/*{renderDraggedItem()}*/}
                 </StyledPage>
             </SortableContext>
 

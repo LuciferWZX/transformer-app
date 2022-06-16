@@ -28,9 +28,10 @@ const EditorPage = () => {
         },
     });
     const mouseSensor = useSensor(MouseSensor,{
+        
         activationConstraint: {
             delay: 250,
-            tolerance: 5,
+            tolerance: 5
         },
     });
     const keyboardSensor = useSensor(KeyboardSensor);
@@ -38,8 +39,9 @@ const EditorPage = () => {
     const onDragEnd=(event:DragEndEvent)=>{
         //console.log("--------onDragEnd:event",event)
         editorModel.updateComponentListVisible(true)
-        editorModel.updateDraggedId(null)
+        
         editorModel.handleDragEndEvent(event)
+        editorModel.updateDraggedId(null)
     }
     const onDragStart=(event:DragStartEvent)=>{
         editorModel.updateDraggedId(event.active.id as string)
@@ -57,7 +59,7 @@ const EditorPage = () => {
     }
     const onDragOver=(event:DragOverEvent)=>{
         editorModel.handleDragOverEvent(event)
-        console.log("onDragOver:event",event)
+        //console.log("onDragOver:event",event)
     }
     return(
         <DndContext
@@ -66,14 +68,14 @@ const EditorPage = () => {
             onDragMove={onDragMove}
             onDragCancel={onDragCancel}
             onDragOver={onDragOver}
-            collisionDetection={closestCorners}
+            //collisionDetection={closestCenter}
             //modifiers={[restrictToWindowEdges]}
             // measuring={{
             //     draggable:{
             //         strategy: MeasuringStrategy.Always,
             //     }
             // }}
-            modifiers={[restrictToWindowEdges]}
+            //modifiers={[restrictToWindowEdges]}
             sensors={sensors}
         >
             <EditorPageBox>

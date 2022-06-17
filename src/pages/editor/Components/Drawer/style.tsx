@@ -51,6 +51,7 @@ export const CollapseBox = styled(Collapse)`
     .ant-collapse-item{
         border-bottom: 0!important;
     }
+
 `
 export const GridBox = styled.div`
     display: grid;

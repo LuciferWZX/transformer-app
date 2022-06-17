@@ -14,7 +14,8 @@ import DraggableItem from "@/pages/editor/Components/Drawer/DraggableItem";
 import {DragOverlay} from "@dnd-kit/core";
 import {snapCenterToCursor} from "@dnd-kit/modifiers";
 import IconFont from "@/components/icon-font";
-import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable";
+
+import {ReactSortable} from "react-sortablejs";
 const { Panel } = CollapseBox;
 const ComponentDrawer:FC = () => {
     const {containers,components,visible,draggedId} = useModel(editorModel,state => ({
@@ -37,6 +38,9 @@ const ComponentDrawer:FC = () => {
         }
         return null
     }
+    const setData=(data:any)=>{
+        console.log(111,data)
+    }
     return(
         <ComponentDrawerBox visible={visible}>
             <div className={'support-box'}>
@@ -56,21 +60,34 @@ const ComponentDrawer:FC = () => {
                             const data = components.filter(component=>component.kind === container.type)
                             return(
                                 <Panel key={container.type} header={container.name} >
-                                    <SortableContext
-                                        items={data.map(item=>item.type)}
-                                        strategy={horizontalListSortingStrategy}>
-                                        <GridBox>
-                                            
-                                            {data.map((item,index)=>{
-                                                return(
-                                                    <DraggableItem key={item.type} id={item.type} icon={item.icon}>
-                                                        {item.name}
-                                                    </DraggableItem>
-                                                )
-                                            })}
-                                
-                                        </GridBox>
-                                    </SortableContext>
+                                   
+                                    <ReactSortable
+                                        group={{
+                                            name:container.name,
+                                            revertClone:true,
+                                            pull:['clone']
+                                        }}
+                                        sort={false}
+                                        delayOnTouchOnly={true}
+                                        delay={20000}
+                                        forceFallback={true}
+                                        fallbackClass={"drag-class"}
+                                        tag={GridBox}
+                                        list={data.map(item=>{
+                                            return {
+                                                ...item,
+                                                id:item.type
+                                            }
+                                        })} setList={setData}>
+                                    {data.map((item,index)=>{
+                                        return(
+                                            <DraggableItem key={item.type} id={item.type} icon={item.icon}>
+                                                {item.name}
+                                            </DraggableItem>
+                                        )
+                                    })}
+                                    </ReactSortable>
+                               
                                 </Panel>
                             )
                         })}

@@ -16,7 +16,7 @@ export const ComponentDrawerBox = styled.div<{visible:boolean}>`
         if(!visible){
             return css`
                 width: 0;
-                
+                //display: none;
             `
         }
     }};

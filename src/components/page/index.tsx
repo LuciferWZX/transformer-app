@@ -17,15 +17,10 @@ interface IProps extends PageSchema{
 const Page:FC<IProps> = (props) => {
     const {id,childrenIds}=props
     const draggedId = useModel(editorModel,state => state.draggedId)
-    const {
-        setNodeRef,
-        //isOver
-    } = useDroppable({
-        id: id,
-        data:{
-            parentId:null
-        }
+    const { setNodeRef } = useDroppable({
+        id
     });
+    
     const style = {
         //backgroundColor: isOver ? 'orange' : undefined,
     };
@@ -52,12 +47,13 @@ const Page:FC<IProps> = (props) => {
         return null
     }
     return(
-
-
+    
+        
             <SortableContext
                 items={childrenIds}
+                id={id.toString()}
                 strategy={verticalListSortingStrategy}>
-                <StyledPage ref={setNodeRef} style={style} isOver={false}>
+                <StyledPage isOver={false} ref={setNodeRef} >
                     {childrenIds.map(_id => {
                         return (
                             <SortableItem inCanvas={true} parentId={id} key={_id} id={_id}>
@@ -68,6 +64,7 @@ const Page:FC<IProps> = (props) => {
                     {/*{renderDraggedItem()}*/}
                 </StyledPage>
             </SortableContext>
+       
 
 
     )

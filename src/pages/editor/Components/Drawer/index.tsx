@@ -15,6 +15,8 @@ import {DragOverlay} from "@dnd-kit/core";
 import {snapCenterToCursor} from "@dnd-kit/modifiers";
 import IconFont from "@/components/icon-font";
 import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable";
+import {SortableItem} from "@/components";
+import ItemCard from "../../../../components/item-card";
 const { Panel } = CollapseBox;
 const ComponentDrawer:FC = () => {
     const {containers,components,visible,draggedId} = useModel(editorModel,state => ({
@@ -57,18 +59,20 @@ const ComponentDrawer:FC = () => {
                             return(
                                 <Panel key={container.type} header={container.name} >
                                     <SortableContext
+                                        id={'component-list'}
+                                        disabled={!!draggedId}
                                         items={data.map(item=>item.type)}
                                         strategy={horizontalListSortingStrategy}>
                                         <GridBox>
-                                            
                                             {data.map((item,index)=>{
                                                 return(
-                                                    <DraggableItem key={item.type} id={item.type} icon={item.icon}>
-                                                        {item.name}
-                                                    </DraggableItem>
+                                                    <SortableItem inCanvas={false} parentId={null} key={item.type} id={item.type}>
+                                                        <ItemCard style={{width:'100%'}} icon={item.icon}>
+                                                            {item.name}
+                                                        </ItemCard>
+                                                    </SortableItem>
                                                 )
                                             })}
-                                
                                         </GridBox>
                                     </SortableContext>
                                 </Panel>

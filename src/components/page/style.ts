@@ -2,6 +2,7 @@ import styled, {css} from "styled-components";
 
 export const StyledPage = styled.div<{isOver:boolean}>`
     min-height: 100%;
+    background-color: #2f54eb;
     ${({isOver})=>{
         if(isOver){
             return css`

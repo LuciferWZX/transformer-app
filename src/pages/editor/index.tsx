@@ -4,20 +4,30 @@ import Dashboard from "@/pages/editor/Dashboard";
 import Attribute from "@/pages/editor/Attribute";
 import ComponentDrawer from "@/pages/editor/Components/Drawer";
 import {
-    closestCenter, closestCorners,
+    closestCenter,
+    closestCorners, defaultAnnouncements,
     DndContext,
     DragCancelEvent,
     DragEndEvent,
     DragMoveEvent,
     DragOverEvent,
     DragOverlay,
-    DragStartEvent, KeyboardSensor, MeasuringStrategy, MouseSensor, TouchSensor, useSensor, useSensors
+    DragStartEvent,
+    KeyboardSensor,
+    MeasuringStrategy,
+    MouseSensor,
+    PointerSensor,
+    rectIntersection,
+    TouchSensor,
+    useSensor,
+    useSensors
 } from "@dnd-kit/core";
 import React, {useState} from "react";
 import {restrictToWindowEdges} from "@dnd-kit/modifiers";
 import {editorModel} from "@/models/editorModel";
 import {createPortal} from "react-dom";
 import Draggable from "@/pages/editor/Draggable";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 const EditorPage = () => {
     
@@ -27,6 +37,7 @@ const EditorPage = () => {
             tolerance: 5,
         },
     });
+    const pointerSensor = useSensor(PointerSensor);
     const mouseSensor = useSensor(MouseSensor,{
         
         activationConstraint: {
@@ -34,64 +45,44 @@ const EditorPage = () => {
             tolerance: 5
         },
     });
-    const keyboardSensor = useSensor(KeyboardSensor);
-    const sensors = useSensors(touchSensor, mouseSensor, keyboardSensor);
+    const keyboardSensor = useSensor(KeyboardSensor,{
+        coordinateGetter: sortableKeyboardCoordinates,
+    });
+    
+    const sensors = useSensors(touchSensor, mouseSensor, keyboardSensor,pointerSensor);
     const onDragEnd=(event:DragEndEvent)=>{
-        //console.log("--------onDragEnd:event",event)
+        console.log("End:", {active:event.active,over:event.over})
         editorModel.updateComponentListVisible(true)
-        
-        editorModel.handleDragEndEvent(event)
         editorModel.updateDraggedId(null)
     }
     const onDragStart=(event:DragStartEvent)=>{
         editorModel.updateDraggedId(event.active.id as string)
-        //console.log("--------onDragStart:event",event)
+        editorModel.updateComponentListVisible(false)
+        console.log("Start:",event)
         
     }
-    const onDragMove=(event:DragMoveEvent)=>{
-        editorModel.updateComponentListVisible(false)
-        //console.log("--------onDragMove:event",event.over?.id)
-    }
-    const onDragCancel=(event:DragCancelEvent)=>{
-        editorModel.updateComponentListVisible(true)
-        editorModel.updateDraggedId(null)
-        //console.log("--------onDragCancel:event",event)
-    }
+
     const onDragOver=(event:DragOverEvent)=>{
-        editorModel.handleDragOverEvent(event)
-        //console.log("onDragOver:event",event)
+       
+        const {active, over,} = event;
+        const {id} = active;
+        const overId = over?.id;
+        console.log("over:", {active:event.active,over:event.over?.id})
+        console.log("id:", id)
+        console.log("overId:", overId)
     }
     return(
         <DndContext
             onDragEnd={onDragEnd}
             onDragStart={onDragStart}
-            onDragMove={onDragMove}
-            onDragCancel={onDragCancel}
             onDragOver={onDragOver}
-            //collisionDetection={closestCenter}
-            //modifiers={[restrictToWindowEdges]}
-            // measuring={{
-            //     draggable:{
-            //         strategy: MeasuringStrategy.Always,
-            //     }
-            // }}
-            //modifiers={[restrictToWindowEdges]}
+            collisionDetection={rectIntersection}
+            accessibility={{
+                announcements:defaultAnnouncements,
+            }}
             sensors={sensors}
         >
             <EditorPageBox>
-                {/*<div>*/}
-                {/*    {items.map(id =>*/}
-                {/*        <Draggable key={id} id={id}>*/}
-                {/*            `Item ${id}`*/}
-                {/*        </Draggable>*/}
-                {/*    )}*/}
-                {/*</div>*/}
-                
-                {/*<DragOverlay dropAnimation={null}>*/}
-                {/*    {activeId ? (*/}
-                {/*        <div>`Item ${activeId}`</div>*/}
-                {/*    ): null}*/}
-                {/*</DragOverlay>*/}
                 <Dashboard/>
                 <EditorCenter>
                     {/*<Components/>*/}

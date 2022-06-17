@@ -4,15 +4,18 @@ import {CSS} from '@dnd-kit/utilities';
 import {UniqueIdentifier} from "@dnd-kit/core";
 import {SortableItemBox} from "@/components/sortable-item/style";
 import {LineItemBox} from "./style";
+import {SortableTransition} from "@dnd-kit/sortable/dist/hooks/types";
 interface IProps{
     children?:React.ReactNode
     id:UniqueIdentifier
     draggedStyled?:'horizon-line',
-    parentId:UniqueIdentifier
+    parentId:UniqueIdentifier|null
     inCanvas?:boolean
+    disabledSort?:boolean
+    disabledWhenDrag?:boolean
 }
 const SortableItem:FC<IProps> = (props) => {
-    const {children,id,draggedStyled,parentId,inCanvas}=props
+    const {children,id,disabledWhenDrag,parentId,inCanvas,disabledSort}=props
     const {
         attributes,
         listeners,
@@ -23,6 +26,7 @@ const SortableItem:FC<IProps> = (props) => {
         isDragging,
     } = useSortable({
         id: id,
+        disabled:disabledWhenDrag,
         data:{
             parentId:parentId,
             inCanvas:inCanvas
@@ -30,17 +34,10 @@ const SortableItem:FC<IProps> = (props) => {
     });
     
     const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
+        transform: disabledSort?undefined:CSS.Transform.toString(transform),
+        //transition,
     };
-    if (isDragging){
-        if(!draggedStyled ||draggedStyled === "horizon-line"){
-            return (
-                <LineItemBox ref={setNodeRef} style={style} {...attributes} {...listeners}/>
-            )
-        }
 
-    }
     return (
         <SortableItemBox ref={setNodeRef} style={style} {...attributes} {...listeners}>
             {children}

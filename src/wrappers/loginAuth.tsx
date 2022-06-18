@@ -7,7 +7,7 @@ interface IProps{
 }
 const LoginAuth:FC<IProps> = ({children}) => {
     const {user} = useModel(userModel);
-    console.log("login_auth",user)
+    console.log("对路由鉴权2：",user)
     if (user){
         return <Navigate to="/"/>
     }

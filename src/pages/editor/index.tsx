@@ -51,25 +51,26 @@ const EditorPage = () => {
     
     const sensors = useSensors(touchSensor, mouseSensor, keyboardSensor,pointerSensor);
     const onDragEnd=(event:DragEndEvent)=>{
-        console.log("End:", {active:event.active,over:event.over})
+        //console.log("End:", {active:event.active,over:event.over})
         editorModel.updateComponentListVisible(true)
         editorModel.updateDraggedId(null)
     }
     const onDragStart=(event:DragStartEvent)=>{
         editorModel.updateDraggedId(event.active.id as string)
         editorModel.updateComponentListVisible(false)
-        console.log("Start:",event)
+        //console.log("Start:",event)
         
     }
 
     const onDragOver=(event:DragOverEvent)=>{
        
         const {active, over,} = event;
-        const {id} = active;
-        const overId = over?.id;
+        if(over?.id === active.id){
+            return
+        }
+
         console.log("over:", {active:event.active,over:event.over?.id})
-        console.log("id:", id)
-        console.log("overId:", overId)
+        editorModel.updateOverId(event.over?.id)
     }
     return(
         <DndContext

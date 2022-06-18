@@ -1,9 +1,9 @@
 import {defineModel} from "foca";
 import {ComponentContainer, ComponentCollectionType, SchemaType, ComponentType} from "@/models/editorModelType";
-import {IconName} from "@/types/icon";
+
 import {GlobalSchema} from "./editorModelType";
-import {DragEndEvent, DragOverEvent, UniqueIdentifier} from "@dnd-kit/core";
-import {generateComponent} from "@/utils/util";
+import {UniqueIdentifier} from "@dnd-kit/core";
+import {COMPONENTS, CONTAINER} from "@/constants/constants";
 
 export interface EditorModelState{
     components:ComponentCollectionType[]
@@ -12,33 +12,11 @@ export interface EditorModelState{
     draggedId:UniqueIdentifier|null
     schema:GlobalSchema
     currentPageId:string //当前页面的id
+    overId:UniqueIdentifier|ComponentType|undefined //拉住的组件的id
 }
 const initialState:EditorModelState={
-    components:[{
-        type:"Input",
-        kind:"DataEntry",
-        name:"输入框",
-        icon:IconName.InputIcon
-    },{
-        type:"TextareaInput",
-        kind:"DataEntry",
-        name:"多行输入框",
-        icon:IconName.TextareaInputIcon
-    },{
-        type:"NumberInput",
-        kind:"DataEntry",
-        name:"数字输入框",
-        icon:IconName.NumberInputIcon
-    },{
-            type:"PasswordInput",
-            kind:"DataEntry",
-            name:"密码输入框",
-            icon:IconName.PasswordInputIcon
-        }],
-    componentsContainer:[
-        {type:"Container",name:"容器"},
-        {type:"DataEntry",name:"数据录入"},
-    ],
+    components:COMPONENTS,
+    componentsContainer:CONTAINER,
     componentListVisible:true,
     draggedId:null,
     currentPageId:"initial-page-id",
@@ -53,7 +31,8 @@ const initialState:EditorModelState={
                 childrenIds:[]
             }
         ]
-    }
+    },
+    overId:undefined
 }
 
 export const editorModel = defineModel('editor',{
@@ -90,6 +69,9 @@ export const editorModel = defineModel('editor',{
         //更新正在拖拉的id
         updateComponents(state,components:ComponentCollectionType[]){
             state.components = components
+        },
+        updateOverId(state,id:UniqueIdentifier|ComponentType|undefined){
+            state.overId = id
         }
     },
     computed:{

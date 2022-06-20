@@ -3,13 +3,13 @@ interface User {
     username:string
     token:string
 }
-export interface UserModelState {
+export interface UserStoreState {
     user:User|null
 }
-const initialState:UserModelState = {
+const initialState:UserStoreState = {
     user:null,
 }
-export const userModel = defineModel('user',{
+export const userStore = defineModel('user',{
     initialState,
     events:{
         async onInit(){
@@ -19,7 +19,7 @@ export const userModel = defineModel('user',{
     actions:{
         //设置user
         setUser(state,user:User|null){
-          state.user = user
+            state.user = user
         },
         //清除所有的数据
         clear(){
